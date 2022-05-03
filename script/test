@@ -13,8 +13,8 @@ cleanup() {
   if [ $rv != 0 ]; then
     echo "FAILED"
   fi
-  exit $rv
   pkill -9 -f rccharm
+  exit $rv
 }
 trap "cleanup" EXIT
 

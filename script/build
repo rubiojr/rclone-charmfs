@@ -1,9 +1,9 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 
 BASE_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-mkdir -p $BASH_PATH/../tmp
+mkdir -p $BASE_PATH/../tmp
 
 if [ ! -d vendor/rclone ]; then 
   echo "⬇️ Vendoring rclone..."
