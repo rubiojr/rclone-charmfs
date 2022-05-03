@@ -14,6 +14,8 @@ This will clone the rclone repository, add the CharmFS backend code and build th
 
 ## Running
 
+Note that you'll need a working Charm account first, with ssh keys generated etc.
+
 Configure the remote firt:
 
 ```
