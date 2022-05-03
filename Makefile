@@ -10,6 +10,6 @@ clean:
 	rm -rf tmp
 
 nuke: clean
-	rm -rf tools vendor
+	rm -rf tools vendor rclone.conf rclone-charmfs
 
 .PHONY: build clean test nuke

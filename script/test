@@ -61,6 +61,9 @@ sleep 2
 echo "🚀 Done waiting, Charm server running"
 charm fs rm charm:
 
+# Setup rclone remote
+$RCLONE config --config=rclone.conf create charm charm url=http://localhost > /dev/null
+
 t $RCLONE copy README.md charm:
 
 t $RCLONE cat charm:README.md | grep -q :heart:
