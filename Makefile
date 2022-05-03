@@ -9,5 +9,7 @@ test: clean
 clean:
 	rm -rf tmp
 
-.PHONY: build clean test
+nuke: clean
+	rm -rf tools vendor
 
+.PHONY: build clean test nuke
