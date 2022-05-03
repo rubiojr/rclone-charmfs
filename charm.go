@@ -181,9 +181,7 @@ func (f *Fs) NewObject(ctx context.Context, remote string) (fs.Object, error) {
 		remote: remote,
 	}
 
-	o.stat(ctx)
-
-	return o, nil
+	return o, o.stat(ctx)
 }
 
 func (f *Fs) List(ctx context.Context, dir string) (entries fs.DirEntries, err error) {
@@ -410,7 +408,7 @@ func (f *Fs) writeFile(ctx context.Context, name string, in io.Reader) error {
 	// pipe the multipart request to the server
 	rr, rw := io.Pipe()
 	defer rr.Close() // nolint:errcheck
-	errs, ctx := errgroup.WithContext(ctx)
+	errs, _ := errgroup.WithContext(ctx)
 	errs.Go(func() error {
 		defer rw.Close() // nolint:errcheck
 

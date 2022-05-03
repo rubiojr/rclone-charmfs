@@ -2,22 +2,23 @@
 set -e
 
 BASE_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+VENDOR_DIR=rclone
 
 mkdir -p $BASE_PATH/../tmp
 
-if [ ! -d vendor/rclone ]; then 
+if [ ! -d rclone ]; then 
   echo "⬇️ Vendoring rclone..."
-  git clone --quiet --depth 1 https://github.com/rclone/rclone vendor/rclone > /dev/null
+  git clone --quiet --depth 1 https://github.com/rclone/rclone $VENDOR_DIR > /dev/null
 fi
 
 echo "🚧 Bulding rclone-charmfs" 
-echo "package all" > vendor/rclone/backend/all/charm.go
-echo "import (" >> vendor/rclone/backend/all/charm.go
-echo "  _ \"github.com/rclone/rclone/backend/charm\"" >> vendor/rclone/backend/all/charm.go
-echo ")" >> vendor/rclone/backend/all/charm.go
+echo "package all" > $VENDOR_DIR/backend/all/charm.go
+echo "import (" >> $VENDOR_DIR/backend/all/charm.go
+echo "  _ \"github.com/rclone/rclone/backend/charm\"" >> $VENDOR_DIR/backend/all/charm.go
+echo ")" >> $VENDOR_DIR/backend/all/charm.go
 
-mkdir -p vendor/rclone/backend/charm
-cp charm.go vendor/rclone/backend/charm/
-cd vendor/rclone && \
+mkdir -p $VENDOR_DIR/backend/charm
+cp charm.go $VENDOR_DIR/backend/charm/
+cd rclone && \
   go mod tidy > $BASE_PATH/../tmp/go.log 2>&1 && \
   go build -o ../../rclone-charm

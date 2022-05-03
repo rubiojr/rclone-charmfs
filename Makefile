@@ -10,6 +10,9 @@ clean:
 	rm -rf tmp
 
 nuke: clean
-	rm -rf tools vendor rclone.conf rclone-charmfs
+	rm -rf tools rclone rclone.conf rclone-charmfs
 
-.PHONY: build clean test nuke
+lint:
+	golangci-lint run
+
+.PHONY: build clean test nuke lint
