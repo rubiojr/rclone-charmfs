@@ -34,7 +34,7 @@ Far from being bug free and efficient, may eat data.
 
 * cat
 * copy
-* delete, deletefile (buggy)
+* delete
 * ls, lsd, lsf, lsjson, lsl
 * lsd
 * mount (partially, VFS caching doesn't work as expected, which means opening files with other programs will be broken)
@@ -53,6 +53,7 @@ Far from being bug free and efficient, may eat data.
 * mkdir (not sure yet if we can mkdir empty directories in Charm)
 * move (not implemented)
 * moveto (not implemented)
+* deletefile (buggy)
 
 ## Commands not tested
 

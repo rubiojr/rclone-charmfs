@@ -76,4 +76,7 @@ t $RCLONE copy README.md charm:dir/subdir/README.md
 
 t $RCLONE delete charm:dir/subdir/README.md
 
-count_lines 1 "file does not exist" charm fs ls /dir/subdir
+count_lines 1 "file does not exist" charm fs ls /dir/subdir/README.md
+count_lines 1 "README.md" charm fs ls /dir/README.md
+count_lines 1 "README.md" charm fs ls /README.md
+count_lines 5 "" charm fs tree /

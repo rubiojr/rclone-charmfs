@@ -125,7 +125,7 @@ func NewFs(ctx context.Context, name, root string, m configmap.Mapper) (fs.Fs, e
 		charmClient: charmClient,
 	}
 	f.features = (&fs.Features{
-		CanHaveEmptyDirectories: false,
+		CanHaveEmptyDirectories: true,
 	}).Fill(ctx, f)
 
 	o, err := f.NewObject(ctx, root)
@@ -331,7 +331,9 @@ func (f *Fs) Mkdir(ctx context.Context, dir string) error {
 
 // Remove a remote file object
 func (o *Object) Remove(ctx context.Context) error {
-	return o.fs.cfs.Remove(o.fs.Root())
+	opath := filepath.Join(o.fs.root, o.remote)
+	fs.Infof(o, "removing object %s", opath)
+	return o.fs.cfs.Remove(opath)
 }
 
 // Rmdir removes the root directory of the Fs object
