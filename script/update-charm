@@ -1,10 +1,17 @@
 #!/bin/bash
 set -e
 
+BASE_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 REPO=charmbracelet/charm
 PKG=charm
-
 v="v0.12.0"
+
+echo "⬇️ Downloading $REPO $v..."
+if [ -f $BASE_PATH/../tools/rccharm ]; then
+  echo "✅ charm binary available"
+  exit 0
+fi
+
 
 tmpdir="$TMPDIR"
 if [ ! -d "$tmpdir" ]; then
@@ -14,7 +21,6 @@ fi
 d=$(mktemp -d $tmpdir/ghpkgXXXX)
 trap "rm -rf '$d'" EXIT
 
-echo "** Downloading $REPO $v..."
 realver=${v:1}
 curl -L -s https://github.com/$REPO/releases/download/"$v"/${PKG}_${realver}_linux_x86_64.tar.gz > $d/ghpkg.tgz
 cd $d && tar xzvf ghpkg.tgz > /dev/null
