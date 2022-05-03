@@ -34,19 +34,25 @@ Far from being bug free and efficient, may eat data.
 
 * cat
 * copy
-* delete
-* deletefile
-* ls
+* delete, deletefile (buggy)
+* ls, lsd, lsf, lsjson, lsl
+* lsd
 * mount (partially, VFS caching doesn't work as expected, which means opening files with other programs will be broken)
 * tree
 
 ## Unsupported commands
 
 * about (No quota support in CharmFS to my knowledge) 
+* size (no way to get remote plaintext file size currently)
+* sha1sum (no way to get remote plaintext sha1sum currently)
+* touch (Change remote file mod time not currently supported by CharmFS to my knowledge)
+* selfupdate (the plan is to upstream the backend eventually)
 
 ## Commands not working
 
 * mkdir (not sure yet if we can mkdir empty directories in Charm)
+* move (not implemented)
+* moveto (not implemented)
 
 ## Commands not tested
 
