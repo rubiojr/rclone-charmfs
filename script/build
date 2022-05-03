@@ -1,0 +1,15 @@
+#!/bin/sh
+set -e
+
+if [ ! -d vendor/rclone ]; then 
+  git clone https://github.com/rclone/rclone vendor/rclone
+fi
+
+echo "package all" > vendor/rclone/backend/all/charm.go
+echo "import (" >> vendor/rclone/backend/all/charm.go
+echo "  _ \"github.com/rclone/rclone/backend/charm\"" >> vendor/rclone/backend/all/charm.go
+echo ")" >> vendor/rclone/backend/all/charm.go
+
+mkdir -p vendor/rclone/backend/charm
+cp charm.go vendor/rclone/backend/charm/
+cd vendor/rclone && go mod tidy && go build -o ../../rclone-charm

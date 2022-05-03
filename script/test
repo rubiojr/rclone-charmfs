@@ -1,0 +1,79 @@
+#!/bin/bash
+set -e
+
+BASE_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+export CHARM_HOST=localhost CHARM_HTTP_PORT=35354 CHARM_SERVER_PUBLIC_URL=http://localhost
+
+RCLONE="./rclone-charm"
+CHARM=$BASE_PATH/../tools/rccharm
+
+cleanup() {
+  rv=$?
+  if [ $rv != 0 ]; then
+    echo "FAILED"
+  fi
+  exit $rv
+  pkill -9 -f rccharm
+}
+trap "cleanup" EXIT
+
+t() {
+  echo "🧪 Running test: $@" >&2
+  $@
+}
+
+count_lines() {
+  local n=$1
+  local filter=$2
+  shift
+  shift 
+  echo "🧪 Running test: $@" >&2
+  if [ "$filter" != "" ]; then
+    local c=$($@ 2>&1 | grep "$filter" | wc -l)
+  else
+    local c=$($@ 2>&1 | wc -l)
+  fi
+
+  if [ $c != $n ]; then
+    echo "Invalid count $c, expected $n (filter $filter)" >&2
+    exit 1
+  fi
+}
+
+mkdir -p $BASE_PATH/../tmp
+
+$BASE_PATH/build
+
+$BASE_PATH/update-charm
+
+rm -rf $BASE_PATH/../tmp/charmdata
+$BASE_PATH/../tools/rccharm serve --data-dir $BASE_PATH/../tmp/charmdata > $BASE_PATH/../tmp/charm.log 2>&1 &
+
+echo "⏳ Waiting for Charm servers to start..."
+while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:35354)" != "400" ]]; do sleep 5; done
+
+sleep 2
+
+[ $(curl -s -o /dev/null -w ''%{http_code}'' localhost:35354) == "400" ]
+
+echo "🚀 Done waiting, Charm server running"
+charm fs rm charm:
+
+t $RCLONE copy README.md charm:
+
+t $RCLONE cat charm:README.md | grep -q :heart:
+
+t $RCLONE copy README.md charm:dir/README.md
+
+t $RCLONE cat charm:dir/README.md | grep -q :heart:
+
+count_lines 1 :heart: $RCLONE cat charm:dir/README.md
+
+count_lines 2 "" $RCLONE ls charm:
+
+t $RCLONE copy README.md charm:dir/subdir/README.md
+
+t $RCLONE delete charm:dir/subdir/README.md
+
+count_lines 1 "file does not exist" charm fs ls /dir/subdir

@@ -1,0 +1,24 @@
+#!/bin/bash
+set -e
+
+REPO=charmbracelet/charm
+PKG=charm
+
+v="v0.12.0"
+
+tmpdir="$TMPDIR"
+if [ ! -d "$tmpdir" ]; then
+  tmpdir=/tmp
+fi
+
+d=$(mktemp -d $tmpdir/ghpkgXXXX)
+trap "rm -rf '$d'" EXIT
+
+echo "** Downloading $REPO $v..."
+realver=${v:1}
+curl -L -s https://github.com/$REPO/releases/download/"$v"/${PKG}_${realver}_linux_x86_64.tar.gz > $d/ghpkg.tgz
+cd $d && tar xzvf ghpkg.tgz > /dev/null
+cd - >/dev/null
+
+mkdir -p tools
+mv $d/charm tools/rccharm
