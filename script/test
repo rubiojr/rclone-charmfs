@@ -5,8 +5,8 @@ BASE_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 export CHARM_HOST=localhost CHARM_HTTP_PORT=35354 CHARM_SERVER_PUBLIC_URL=http://localhost
 
-export PATH=$BASE_PATH/../tools:$PATH
-RCLONE="./rclone-charm"
+export PATH=$BASE_PATH/../tools:$BASE_PATH/..:$PATH
+RCLONE="rclone-charm"
 
 cleanup() {
   rv=$?
@@ -49,7 +49,7 @@ $BASE_PATH/update-charm
 ln -sf $BASE_PATH/../tools/rccharm $BASE_PATH/../tools/charm
 
 rm -rf $BASE_PATH/../tmp/charmdata
-charm serve --data-dir $BASE_PATH/../tmp/charmdata > $BASE_PATH/../tmp/charm.log 2>&1 &
+rccharm serve --data-dir $BASE_PATH/../tmp/charmdata > $BASE_PATH/../tmp/charm.log 2>&1 &
 
 echo "⏳ Waiting for Charm servers to start..."
 while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:35354)" != "400" ]]; do sleep 5; done

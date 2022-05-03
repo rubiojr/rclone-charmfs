@@ -21,4 +21,4 @@ mkdir -p $VENDOR_DIR/backend/charm
 cp charm.go $VENDOR_DIR/backend/charm/
 cd rclone && \
   go mod tidy > $BASE_PATH/../tmp/go.log 2>&1 && \
-  go build -o ../../rclone-charm
+  go build -o $BASE_PATH/../rclone-charm

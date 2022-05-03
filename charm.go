@@ -181,7 +181,12 @@ func (f *Fs) NewObject(ctx context.Context, remote string) (fs.Object, error) {
 		remote: remote,
 	}
 
-	return o, o.stat(ctx)
+	err := o.stat(ctx)
+	if err != nil {
+		fs.Debugf(f, "failed to stat object %s", remote)
+	}
+
+	return o, nil
 }
 
 func (f *Fs) List(ctx context.Context, dir string) (entries fs.DirEntries, err error) {

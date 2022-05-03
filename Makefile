@@ -10,7 +10,7 @@ clean:
 	rm -rf tmp
 
 nuke: clean
-	rm -rf tools rclone rclone.conf rclone-charmfs
+	rm -rf tools rclone rclone.conf rclone-charm
 
 lint:
 	golangci-lint run
